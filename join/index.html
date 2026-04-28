@@ -5,47 +5,90 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Juego de los Chinos</title>
   <style>
-    body { font-family: sans-serif; text-align: center; padding: 60px 20px;
-           background: #FDF3E3; margin: 0; }
-    h2 { color: #8B4513; font-size: 1.8em; }
-    .code { font-size: 2em; font-weight: bold; letter-spacing: 8px;
-            color: #5C2D0A; background: white; padding: 16px 24px;
-            border-radius: 12px; display: inline-block; margin: 16px 0; }
-    .room { font-size: 1.2em; color: #5C2D0A; font-weight: 600; }
-    .btn { display: inline-block; margin-top: 24px; background: #4CAF50;
-           color: white; padding: 14px 28px; border-radius: 8px;
-           text-decoration: none; font-size: 16px; }
-    .hint { margin-top: 20px; color: #888; font-size: 13px; line-height: 1.6; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      min-height: 100vh;
+      background: linear-gradient(160deg, #3E1F00 0%, #7B3A10 50%, #3E1F00 100%);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      display: flex; align-items: center; justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: rgba(255,255,255,0.95);
+      border-radius: 24px;
+      padding: 36px 28px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+    .icon { font-size: 56px; margin-bottom: 8px; }
+    h1 { font-size: 22px; font-weight: 800; color: #3E1F00; margin-bottom: 4px; }
+    .tagline { font-size: 13px; color: #888; margin-bottom: 24px; }
+    .divider { height: 1px; background: #eee; margin: 0 -8px 20px; }
+    .invite-label { font-size: 12px; color: #999; text-transform: uppercase;
+                    letter-spacing: 1px; margin-bottom: 6px; }
+    .room-name { font-size: 18px; font-weight: 700; color: #3E1F00; margin-bottom: 16px; }
+    .code-label { font-size: 12px; color: #999; text-transform: uppercase;
+                  letter-spacing: 1px; margin-bottom: 8px; }
+    .code {
+      font-size: 36px; font-weight: 900; letter-spacing: 10px;
+      color: #7B3A10; background: #FDF3E3;
+      border: 2px dashed #D4956A;
+      border-radius: 14px; padding: 14px 8px;
+      margin-bottom: 24px;
+    }
+    .btn-play {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      background: #3E1F00; color: white;
+      border-radius: 14px; padding: 16px 20px;
+      text-decoration: none; font-size: 16px; font-weight: 700;
+      margin-bottom: 12px;
+      transition: opacity .15s;
+    }
+    .btn-play:hover { opacity: 0.85; }
+    .btn-play img { width: 24px; height: 24px; }
+    .hint { font-size: 12px; color: #aaa; line-height: 1.6; }
   </style>
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const code = params.get('code') || '——';
-      const room = params.get('room') || '';
+      const room = params.get('room') ? decodeURIComponent(params.get('room')) : '';
       document.getElementById('code').textContent = code;
       if (room) {
-        document.getElementById('room').textContent = room;
+        document.getElementById('room-name').textContent = room;
         document.getElementById('room-section').style.display = 'block';
       }
+      // Construye el deep link para abrir la app directamente
+      const appLink = `https://titogamingcompany.github.io/join/?code=${params.get('code')}&room=${params.get('room') || ''}`;
+      document.getElementById('btn-play').href =
+        `intent://titogamingcompany.github.io/join/?code=${params.get('code')}&room=${params.get('room') || ''}#Intent;scheme=https;package=com.titogamingcompany.juego_chinos;end`;
     });
   </script>
 </head>
 <body>
-  <h2>🪙 Juego de los Chinos</h2>
-  <p>Te han invitado a una partida</p>
-  <div id="room-section" style="display:none">
-    <p>Sala: <span class="room" id="room"></span></p>
+  <div class="card">
+    <div class="icon">🪙</div>
+    <h1>Juego de los Chinos</h1>
+    <p class="tagline">Te han invitado a una partida</p>
+    <div class="divider"></div>
+    <div id="room-section" style="display:none">
+      <p class="invite-label">Sala</p>
+      <p class="room-name" id="room-name"></p>
+    </div>
+    <p class="code-label">Código de sala</p>
+    <div class="code" id="code">——</div>
+    <a class="btn-play" id="btn-play"
+       href="https://play.google.com/store/apps/details?id=com.titogamingcompany.juego_chinos">
+      <img src="https://www.gstatic.com/android/market_images/web/play_prism_hlock_2x.png"
+           alt="Google Play" style="height:20px;width:auto">
+      Descargar en Google Play
+    </a>
+    <p class="hint">
+      Si ya tienes el juego instalado,<br>
+      ábrelo y usa el código de arriba para unirte o actualiza la aplicación.
+    </p>
   </div>
-  <p>Código:</p>
-  <div class="code" id="code">——</div>
-  <br>
-  <a class="btn"
-     href="https://play.google.com/store/apps/details?id=com.titogamingcompany.juego_chinos">
-    Descargar en Google Play
-  </a>
-  <p class="hint">
-    ¿Ya tienes el juego instalado?<br>
-    Ábrelo y usa el código de arriba para unirte o actualiza la aplicación.
-  </p>
 </body>
 </html>
